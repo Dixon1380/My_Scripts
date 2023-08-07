@@ -37,7 +37,7 @@ def create_directory(path):
             print(error)
 
 
-# Creating mulitple directories at once
+# Creating multiple directories at once
 def make_sub():
     """Returns a boolean based on whether the directories specified will be subdirectories for the given path
         Example:
@@ -96,7 +96,7 @@ def print_default_directories():
 def main():
     path = get_current_directory()
     print(f"Current Directory is: {path}")
-    choice = input("Do you want to use current directory?(y/n): ")
+    choice = input("Do you want to use the current directory?(y/n): ")
     if choice.lower() == 'n':
         path = ''
         print_default_directories()
@@ -106,15 +106,21 @@ def main():
         else:
             raise KeyError(f"{default_dir_key} does not exist as a default key. You must add it as a key")
         print(f"Your Current Directory is now set to: {path}\n\n")
-    choice = int(input("Choose an option:\n\n1)Create one directory\n\n2)Create mutliple directories\n"))
-    if choice == 1:
-        create_directory(path)
-    elif choice == 2:
-        create_directories(path, sub=make_sub())
-    else:
-        raise ValueError("Invalid input!")
-    
 
+    while True:
+        try:
+            choice = int(input("Choose an option:\n\n1) Create one directory\n\n2) Create multiple directories\n"))
+            if choice == 1:
+                create_directory(path)
+                break
+            elif choice == 2:
+                create_directories(path, sub=make_sub())
+                break
+            else:
+                print("Invalid input! Please enter 1 or 2.")
+        except ValueError:
+            print("Invalid input! Please enter a valid number.")
 
 if __name__ == '__main__':
     main()
+    
