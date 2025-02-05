@@ -50,7 +50,7 @@ TOPICS = [
     "How to Improve Your Digital Skills for Career Growth",
     "Understanding Cloud Computing and Why It Matters",
     "The Future of Work: How Digital Literacy Impacts Your Career",
-    "A Beginner’s Guide to Internet Safety and Privacy",
+    "A Beginner's Guide to Internet Safety and Privacy",
     "Top 10 Digital Tools Every Computer User Should Know",
     "The Role of Artificial Intelligence in Digital Literacy",
     "How to Protect Your Online Identity from Cyber Threats",
@@ -64,7 +64,12 @@ def load_used_topics():
     """Loads the list of previously used topics from a JSON file."""
     if os.path.exists(USED_TOPICS_FILE):
         with open(USED_TOPICS_FILE, "r") as file:
-            return json.load(file)
+            try:
+                result = json.load(file)
+                print(f" from loadfunction: {result}")
+                return result
+            except Exception as e:
+                print_message(f"Json Error: {e}")
     return []
 
 def save_used_topic(topic):
@@ -76,18 +81,34 @@ def save_used_topic(topic):
         json.dump(used_topics, file)
 
 def get_unique_topic():
-    """Returns a unique topic, selecting from predefined topics first before using AI-generated ones."""
-    used_topics = load_used_topics()
-    available_topics = list(set(TOPICS) - set(used_topics))  # Remove used topics
+    try:
+        # Read the used topics file (ensure each topic is stored as a string)
+        with open("used_topics.json", "r") as file:
+            used_topics = json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        used_topics = []
 
-    if available_topics:
-        selected_topic = random.choice(available_topics)
-    else:
-        print("⚠️ All predefined topics have been used. Generating a new AI-based topic...")
-        selected_topic = generate_topics()
+    # Ensure used_topics is a flat list (not a list of lists)
+    used_topics = set(map(str, used_topics))
 
-    save_used_topic(selected_topic)
-    return selected_topic
+    # Ensure TOPICS is a flat list too
+    available_topics = list(set(map(str, TOPICS)) - used_topics)
+
+    if not available_topics:
+        print("All topics have been used. Resetting topic list.")
+        available_topics = list(map(str, TOPICS))
+        used_topics = set()
+
+    # Pick a random topic
+    topic = random.choice(available_topics)
+
+    # Append to used topics and save
+    used_topics.add(topic)
+    with open("used_topics.json", "w") as file:
+        json.dump(list(used_topics), file, indent=4)
+
+    return topic
+
 
 # Notify Discord when blog is post. 
 def notify_discord(message):
