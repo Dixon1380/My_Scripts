@@ -1,0 +1,14 @@
+openai
+requests
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+pandas
+flask
+# chatterbot
+# chatterbot_corpus
+ruamel.yaml>=0.17.21
+pyjwt
+python-dotenv
+discord.py
