@@ -124,7 +124,7 @@ def print_message(message):
     print(message)
 
 # Generates the blog posts based on title given
-def generate_blog(title):
+def generate_blog_content(title):
     print_message(f" Blog: {title} is being generated.....")
     prompt = f"""
     Write an **SEO-optimized** blog post titled **'{title}'** with proper **HTML formatting**:
@@ -202,7 +202,7 @@ def post_to_ghost(title, content, scheduled_time):
         print_message("Post failed to send...\n")
         raise Exception(f"Ghost API Error: {response.status_code} - {response.text}")
 
-    print_message(f"✅ {response.status_code} - Post successfully sent to Ghost for publishing.")
+    print_message(f"✅ {response.status_code} - Blog: '{title}' successfully sent to Ghost for publishing.")
     notify_discord(f"✅ A new blog: {title} has been scheduled for publishing!")
 
     return response.json()
@@ -255,18 +255,36 @@ def generate_topics(niche="Computer and Digital Literacy"):
     topics = response.choices[0].message.content.split("\n")
     return [topic.strip("- ").strip() for topic in topics if topic.strip()]
 
-# Variable to get a topic
-topic = get_unique_topic()
 
+# Use this function if you want to generate one blog at a time. 
+def generate_blog(topic):
+    blog_titles = generate_blog_titles(topic)
+    # Randomly choice a title from the list
+    blog_title = random.choice(blog_titles)
+    # Get current time 
+    scheduled_time = get_scheduled_time()
+    # Generate content for blog title
+    blog_content = generate_blog_content(blog_title)
+    # Post Blog to Ghost
+    post_to_ghost(blog_title,blog_content, scheduled_time) 
+    print_message("Blog was successfully generated.")
+   
+
+# Use this function if you want to generate a bulk of blogs.
+def generate_blogs(topic):
+    blog_titles = generate_blog_titles(topic)
+    scheduled_time = get_scheduled_time()
+    for blog_title in blog_titles:
+        blog_content = generate_blog_content(blog_title)
+        post_to_ghost(blog_title, blog_content, scheduled_time)
+    print_message("All blogs were successfully generated.")
 
 # Main application
 def main():
-   blog_titles = generate_blog_titles(topic)
-   scheduled_time = get_scheduled_time()
-   for blog_title in blog_titles:
-     blog_content = generate_blog(blog_title)
-     post_to_ghost(blog_title,blog_content, scheduled_time)
-   print_message("All blogs have been successfully posted to Ghost.")
+   # Get a unique topic
+   topic = get_unique_topic()
+   generate_blog(topic)
+
 
 if __name__ == "__main__":
     main()
