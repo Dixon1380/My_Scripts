@@ -12,3 +12,7 @@ ruamel.yaml>=0.17.21
 pyjwt
 python-dotenv
 discord.py
+schedule
+joblib
+scikit-learn
+matplotlib
