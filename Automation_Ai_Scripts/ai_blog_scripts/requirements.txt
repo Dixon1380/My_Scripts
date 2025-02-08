@@ -16,3 +16,9 @@ schedule
 joblib
 scikit-learn
 matplotlib
+tweepy
+textstat
+numpy
+pandas
+language_tool_python
+gunicorn

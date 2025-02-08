@@ -1,6 +1,11 @@
 import subprocess
 import time
 from ai_logger import logger
+from ai_utils import load_api_keys
+
+# Load API keys at the beginning of execution
+load_api_keys()
+
 
 # Define tasks in the correct execution order
 TASKS = [
@@ -8,6 +13,7 @@ TASKS = [
     ("📊 Running AI A/B Analysis...", "ai_ab_analysis.py"),
     ("🤖 Training AI Predictor...", "ai_predictor.py"),
     ("🔮 Generating AI-Predicted Blog Titles...", "ai_topic_generator.py"),
+    ("🖼️ Generating and Uploading Blog Image...", "ai_image_generator.py"),
     ("📝 Generating and Publishing New Blog...", "ai_blog_generator.py")
 ]
 

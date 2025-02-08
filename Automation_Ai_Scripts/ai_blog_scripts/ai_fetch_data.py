@@ -54,6 +54,5 @@ def fetch_published_posts():
         logger.error(f"❌ Error fetching blog data: {e}")
 
 if __name__ == "__main__":
-    if not os.path.exists(LOG_JSON_FILE):
-        open(LOG_JSON_FILE, "w").close()
+    ai_utils.create_file(LOG_JSON_FILE)
     fetch_published_posts()

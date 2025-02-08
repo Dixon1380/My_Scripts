@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📑 Blog Review Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function approvePost(index) {
+            fetch("/approve", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ index: index })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => console.error("❌ Approval error:", error));
+        }
+
+        function rejectPost(index) {
+            fetch("/reject", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ index: index })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => console.error("❌ Rejection error:", error));
+        }
+    </script>
+</head>
+<body>
+    <h1>📑 Blog Review Dashboard</h1>
+
+    {% if drafts %}
+        {% for post in drafts %}
+            <div class="post">
+                <h2>{{ post.title }}</h2>
+                <p><strong>Quality Score:</strong> {{ post.score }}%</p>
+                <p>{{ post.content[:250] }}...</p>
+                <button class="approve" onclick="approvePost('{{ loop.index0 }}')">✅ Approve</button>
+                <button class="reject" onclick="rejectPost('{{ loop.index0 }}')">❌ Reject</button>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No drafts pending approval.</p>
+    {% endif %}
+</body>
+</html>

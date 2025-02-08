@@ -3,6 +3,7 @@ import joblib
 import os
 from ai_logger import logger
 from sklearn.ensemble import RandomForestRegressor
+import ai_utils
 
 INPUT_CSV = "ab_results.csv"
 MODEL_FILE = "ab_predictor.pkl"
@@ -76,5 +77,6 @@ def predict_best_title():
         return None
 
 if __name__ == "__main__":
+    ai_utils.create_file(MODEL_FILE)
     train_ai_model()
     predict_best_title()

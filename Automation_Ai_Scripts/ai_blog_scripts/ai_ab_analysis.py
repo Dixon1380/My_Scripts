@@ -2,6 +2,7 @@ import json
 import os
 import pandas as pd
 from ai_logger import logger
+import ai_utils
 
 # Files for processing and storing data
 LOG_JSON_FILE = "fetch_data.json"  # Raw JSON data
@@ -63,4 +64,5 @@ def process_engagement_data():
 
 
 if __name__ == "__main__":
+    ai_utils.create_file(OUTPUT_CSV)
     process_engagement_data()

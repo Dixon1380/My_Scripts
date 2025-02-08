@@ -20,9 +20,9 @@ def run_scheduled_pipeline():
     except subprocess.CalledProcessError as e:
         logger.error(f"❌ AI pipeline execution failed: {e}")
 
-# Schedule the pipeline to run every Monday at 2 AM
-schedule.every().monday.at("02:00").do(run_scheduled_pipeline)
-logger.info("🕒 Scheduled AI pipeline to run every Monday at 2 AM.")
+# Schedule the pipeline to run every day at 2 AM
+schedule.every().day.at("02:00").do(run_scheduled_pipeline)
+logger.info("🕒 Scheduled AI pipeline to run every day at 2 AM.")
 
 # Graceful shutdown handling
 def signal_handler(sig, frame):
